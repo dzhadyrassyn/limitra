@@ -1,6 +1,4 @@
-plugins {
-    id("java")
-}
+plugins { java }
 
 java {
     toolchain {
@@ -8,16 +6,11 @@ java {
     }
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
-    // JUnit for testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+tasks.withType<Test> { useJUnitPlatform() }
