@@ -1,4 +1,6 @@
-plugins { java }
+plugins {
+
+}
 
 java {
     toolchain {
