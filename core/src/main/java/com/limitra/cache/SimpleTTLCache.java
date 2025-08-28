@@ -4,15 +4,24 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.LongAdder;
 
 public class SimpleTTLCache<K, V> implements Cache<K, V> {
 
     TimeProvider time;
     ConcurrentHashMap<K, Entry<V>> map;
+    LongAdder hits;
+    LongAdder misses;
+    LongAdder evictionsByTtl;
+    LongAdder evictionsByCapacity;
 
     public SimpleTTLCache(TimeProvider time) {
         this.time = time;
         this.map = new ConcurrentHashMap<>();
+        this.hits = new LongAdder();
+        this.misses = new LongAdder();
+        this.evictionsByTtl = new LongAdder();
+        this.evictionsByCapacity = new LongAdder();
     }
 
     @Override
@@ -80,5 +89,14 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         }
 
         return count;
+    }
+
+    public CacheMetrics metricsSnapshot() {
+        return new MetricsSnapshot(
+                hits.sum(),
+                misses.sum(),
+                evictionsByTtl.sum(),
+                evictionsByCapacity.sum()
+        );
     }
 }
