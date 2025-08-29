@@ -52,14 +52,18 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
 
         Entry<V> entry = map.get(key);
         if (entry == null) {
+            misses.increment();
             return Optional.empty();
         }
 
         if (entry.isExpired(time.nowNanos())) {
+            misses.increment();
+            evictionsByTtl.increment();
             map.remove(key);
             return Optional.empty();
         }
 
+        hits.increment();
         return Optional.of(entry.value);
     }
 
@@ -82,6 +86,7 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         long count = 0;
         for (K key : map.keySet()) {
             if (map.get(key).isExpired(time.nowNanos())) {
+                evictionsByTtl.increment();
                 remove(key);
             } else {
                 ++count;

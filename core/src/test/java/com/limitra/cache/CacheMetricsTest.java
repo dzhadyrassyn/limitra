@@ -101,7 +101,7 @@ class CacheMetricsTest {
         assertEquals(2, a.get());
 
         CacheMetrics snapshotAfter = cache.metricsSnapshot();
-        assertEquals(0, snapshotAfter.hits());
+        assertEquals(1, snapshotAfter.hits());
         assertEquals(0, snapshotAfter.misses());
         assertEquals(0, snapshotAfter.evictedByTtl());
     }
