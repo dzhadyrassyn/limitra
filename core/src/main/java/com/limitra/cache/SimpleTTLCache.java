@@ -14,6 +14,7 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
     LongAdder misses;
     LongAdder evictionsByTtl;
     LongAdder evictionsByCapacity;
+    long capacity;
 
     public SimpleTTLCache(TimeProvider time) {
         this.time = time;
@@ -22,6 +23,11 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         this.misses = new LongAdder();
         this.evictionsByTtl = new LongAdder();
         this.evictionsByCapacity = new LongAdder();
+    }
+
+    public SimpleTTLCache(TimeProvider time, long capacity) {
+        this(time);
+        this.capacity = capacity;
     }
 
     @Override
