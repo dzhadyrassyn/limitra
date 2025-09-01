@@ -14,20 +14,24 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
     LongAdder misses;
     LongAdder evictionsByTtl;
     LongAdder evictionsByCapacity;
-    long capacity;
+    final int maxEntries;
 
     public SimpleTTLCache(TimeProvider time) {
+        this(time, Integer.MAX_VALUE);
+    }
+
+    public SimpleTTLCache(TimeProvider time, int maxEntries) {
+
+        if (maxEntries <= 0) {
+            throw new IllegalArgumentException("maxEntries must be greater than 0");
+        }
         this.time = time;
         this.map = new ConcurrentHashMap<>();
         this.hits = new LongAdder();
         this.misses = new LongAdder();
         this.evictionsByTtl = new LongAdder();
         this.evictionsByCapacity = new LongAdder();
-    }
-
-    public SimpleTTLCache(TimeProvider time, long capacity) {
-        this(time);
-        this.capacity = capacity;
+        this.maxEntries = maxEntries;
     }
 
     @Override

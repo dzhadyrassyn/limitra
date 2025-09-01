@@ -13,7 +13,7 @@ public class CacheLruTest {
     void constructor_invalidCapacity_throws() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new SimpleTTLCache<>(new FakeTimeProvider(), 0L);
+            new SimpleTTLCache<>(new FakeTimeProvider(), 0);
         });
     }
 
@@ -21,7 +21,7 @@ public class CacheLruTest {
     void capacity_exactlyN_items_fit_without_eviction() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2);
 
         // When
         cache.put("a", 1);
@@ -42,7 +42,7 @@ public class CacheLruTest {
     void lru_capacityExceeded_evictsLeastRecentlyUsed() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2);
         cache.put("evictedByCapacity", 1);
         cache.put("b", 2);
 
@@ -62,7 +62,7 @@ public class CacheLruTest {
     void lru_overwriteCountsAsAccess_notExtraEntry() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2);
         cache.put("a", 1);
         cache.put("evictedByCapacity", 2);
 
@@ -84,7 +84,7 @@ public class CacheLruTest {
 
         // Given
         FakeTimeProvider time = new FakeTimeProvider();
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2);
         cache.put("expiredByTtl", 1, 100);
         cache.put("b", 2);
 
@@ -107,7 +107,7 @@ public class CacheLruTest {
 
         // Given
         FakeTimeProvider time = new FakeTimeProvider();
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2);
         cache.put("evictedByTtl1", 1, 50);
         cache.put("evictedByTtl2", 2, 50);
 
@@ -130,7 +130,7 @@ public class CacheLruTest {
 
         // Given
         FakeTimeProvider time = new FakeTimeProvider();
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2);
         cache.put("evictedAndMissed", 1, 50);
         cache.put("b", 2);
 
@@ -154,7 +154,7 @@ public class CacheLruTest {
     void size_reflects_liveEntries_afterEvictions() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2);
         cache.put("evictedByCapacity", 1);
         cache.put("b", 2);
 
@@ -175,7 +175,7 @@ public class CacheLruTest {
 
         // Given
         FakeTimeProvider time = new FakeTimeProvider();
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time, 2);
         cache.put("evictedByTtl", 1, 50);
         cache.put("b", 2);
 
@@ -196,7 +196,7 @@ public class CacheLruTest {
     @Test
     void touchingOnlyNewKey_doesNotEvict_whenWithinCapacity() {
 
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 3L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 3);
         cache.put("a", 1);
         cache.put("b", 2);
 
@@ -218,7 +218,7 @@ public class CacheLruTest {
     void putSameKey_twice_doesNotTemporarilyExceedCapacity() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2L);
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), 2);
         cache.put("a", 1);
         cache.put("a", 2);
         cache.put("b", 3);
@@ -236,7 +236,7 @@ public class CacheLruTest {
     void concurrentAccess_capacityNeverExceeded() throws InterruptedException {
 
         // Given
-        long capacity = 64L;
+        int capacity = 64;
         SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), capacity);
 
         Runnable task = () -> {
