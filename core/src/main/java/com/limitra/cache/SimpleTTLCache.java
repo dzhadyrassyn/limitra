@@ -15,6 +15,7 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
     LongAdder evictionsByTtl;
     LongAdder evictionsByCapacity;
     final int maxEntries;
+    final LruList<K> lruList;
 
     public SimpleTTLCache(TimeProvider time) {
         this(time, Integer.MAX_VALUE);
@@ -32,15 +33,12 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         this.evictionsByTtl = new LongAdder();
         this.evictionsByCapacity = new LongAdder();
         this.maxEntries = maxEntries;
+        this.lruList = new LruList<>(maxEntries);
     }
 
     @Override
     public void put(K key, V value) {
-        Objects.requireNonNull(key, "key must not be null");
-        Objects.requireNonNull(value, "value must not be null");
-
-        map.put(key, new Entry<>(value, Long.MAX_VALUE));
-
+        put(key, value, Long.MAX_VALUE);
     }
 
     @Override
@@ -52,8 +50,15 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
             throw new IllegalArgumentException("ttlMillis must be greater than 0");
         }
 
-        long now = time.nowNanos();
-        map.put(key, new Entry<>(value, now + TimeUnit.MILLISECONDS.toNanos(ttlMillis)));
+        if (size() >= maxEntries && !map.containsKey(key)) {
+            K eldest = lruList.evictEldest();
+            if (remove(eldest)) {
+                evictionsByCapacity.increment();
+            }
+        }
+
+        lruList.recordAccess(key);
+        map.put(key, new Entry<>(value, time.nowNanos() + TimeUnit.MILLISECONDS.toNanos(ttlMillis)));
     }
 
     @Override
@@ -69,11 +74,12 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         if (entry.isExpired(time.nowNanos())) {
             misses.increment();
             evictionsByTtl.increment();
-            map.remove(key);
+            remove(key);
             return Optional.empty();
         }
 
         hits.increment();
+        lruList.recordAccess(key);
         return Optional.of(entry.value);
     }
 
@@ -82,6 +88,9 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         Objects.requireNonNull(key, "key must not be null");
 
         Entry<V> remove = map.remove(key);
+        if (remove != null) {
+            lruList.removeKey(key);
+        }
         return remove != null;
     }
 
