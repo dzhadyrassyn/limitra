@@ -38,27 +38,39 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
 
     @Override
     public void put(K key, V value) {
-        put(key, value, Long.MAX_VALUE);
+        internalPut(key, value, Long.MAX_VALUE);
+    }
+
+    private void internalPut(K key, V value, long ttlMillis) {
+
+        Objects.requireNonNull(key, "key must not be null");
+        Objects.requireNonNull(value, "value must not be null");
+
+        lruList.recordAccess(key);
+        map.put(key, new Entry<>(value, ttlMillis));
+
+        while (map.size() > maxEntries) {
+            K eldest = lruList.evictEldest();
+            Entry<V> eldestItem = map.get(eldest);
+            if (eldestItem != null && eldestItem.isExpired(time.nowNanos())) {
+                if (remove(eldest)) {
+                    evictionsByTtl.increment();
+                }
+            } else if (eldestItem != null) {
+                if (remove(eldest)) {
+                    evictionsByCapacity.increment();
+                }
+            }
+        }
     }
 
     @Override
     public void put(K key, V value, long ttlMillis) {
-        Objects.requireNonNull(key, "key must not be null");
-        Objects.requireNonNull(value, "value must not be null");
 
         if (ttlMillis <= 0) {
             throw new IllegalArgumentException("ttlMillis must be greater than 0");
         }
-
-        if (size() >= maxEntries && !map.containsKey(key)) {
-            K eldest = lruList.evictEldest();
-            if (remove(eldest)) {
-                evictionsByCapacity.increment();
-            }
-        }
-
-        lruList.recordAccess(key);
-        map.put(key, new Entry<>(value, time.nowNanos() + TimeUnit.MILLISECONDS.toNanos(ttlMillis)));
+        internalPut(key, value, time.nowNanos() + TimeUnit.MILLISECONDS.toNanos(ttlMillis));
     }
 
     @Override

@@ -140,7 +140,7 @@ public class CacheLruTest {
         cache.put("c", 3);
 
         // Then
-        assertTrue(cache.get("evictedAndMissed").isEmpty());
+        assertTrue(item1.isEmpty());
         assertTrue(cache.get("b").isPresent());
         assertTrue(cache.get("c").isPresent());
 
