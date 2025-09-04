@@ -12,8 +12,8 @@ public class LruList<K> {
     private final LinkedHashMap<K, Void> lru;
     private final ReentrantLock lock;
 
-    public LruList(int maxEntries) {
-        this.lru = new LinkedHashMap<>(maxEntries, 0.75f, true);
+    public LruList() {
+        this.lru = new LinkedHashMap<>(16,0.75f, true);
         this.lock = new ReentrantLock();
     }
 

@@ -33,7 +33,7 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
         this.evictionsByTtl = new LongAdder();
         this.evictionsByCapacity = new LongAdder();
         this.maxEntries = maxEntries;
-        this.lruList = new LruList<>(maxEntries);
+        this.lruList = new LruList<>();
     }
 
     @Override
