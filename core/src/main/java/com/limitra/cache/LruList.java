@@ -4,22 +4,18 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Access-ordered LRU list for keys
- */
+/** Access-ordered LRU list for keys */
 public class LruList<K> {
 
     private final LinkedHashMap<K, Void> lru;
     private final ReentrantLock lock;
 
     public LruList() {
-        this.lru = new LinkedHashMap<>(16,0.75f, true);
+        this.lru = new LinkedHashMap<>(16, 0.75f, true);
         this.lock = new ReentrantLock();
     }
 
-    /**
-     * Creates or moves key to MRU position
-     */
+    /** Creates or moves key to MRU position */
     public void recordAccess(K key) {
         lock.lock();
         try {
@@ -29,9 +25,7 @@ public class LruList<K> {
         }
     }
 
-    /**
-     * Remove key from the LRU structure
-     */
+    /** Remove key from the LRU structure */
     public void removeKey(K key) {
         lock.lock();
         try {
@@ -41,9 +35,7 @@ public class LruList<K> {
         }
     }
 
-    /**
-     * Remove and return the least-recently-used key, or null if empty
-     */
+    /** Remove and return the least-recently-used key, or null if empty */
     public K evictEldest() {
         lock.lock();
         try {
@@ -60,9 +52,7 @@ public class LruList<K> {
         }
     }
 
-    /**
-     * For debugging/tests only
-     */
+    /** For debugging/tests only */
     public int orderSize() {
         lock.lock();
         try {
@@ -71,5 +61,4 @@ public class LruList<K> {
             lock.unlock();
         }
     }
-
 }

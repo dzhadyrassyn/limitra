@@ -1,7 +1,8 @@
 package com.limitra.cache;
 
 /**
- * Represents an immutable, read-only snapshot of the cache’s counters. To observe updated values, request a new snapshot from the cache implementation.
+ * Represents an immutable, read-only snapshot of the cache’s counters. To observe updated values,
+ * request a new snapshot from the cache implementation.
  */
 public interface CacheMetrics {
 

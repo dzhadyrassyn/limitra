@@ -113,7 +113,7 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
 
     @Override
     public long size() {
-        //TODO Optimize later this O(n) implementation
+        // TODO Optimize later this O(n) implementation
         long count = 0;
         for (K key : map.keySet()) {
             if (map.get(key).isExpired(time.nowNanos())) {
@@ -129,10 +129,6 @@ public class SimpleTTLCache<K, V> implements Cache<K, V> {
 
     public CacheMetrics metricsSnapshot() {
         return new MetricsSnapshot(
-                hits.sum(),
-                misses.sum(),
-                evictionsByTtl.sum(),
-                evictionsByCapacity.sum()
-        );
+                hits.sum(), misses.sum(), evictionsByTtl.sum(), evictionsByCapacity.sum());
     }
 }

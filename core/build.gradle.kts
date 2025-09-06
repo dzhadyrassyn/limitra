@@ -10,6 +10,15 @@ java {
 
 repositories { mavenCentral() }
 
+spotless {
+    java {
+        // Use Google Java Format
+        googleJavaFormat("1.17.0").aosp()
+        // Which files to check
+        target("src/**/*.java")
+    }
+}
+
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")

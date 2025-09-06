@@ -3,9 +3,7 @@ package com.limitra.cache;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * Test-only, monotonic, relative time. Negative advances are rejected.
- */
+/** Test-only, monotonic, relative time. Negative advances are rejected. */
 public class FakeTimeProvider implements TimeProvider {
 
     private final AtomicLong nanos;

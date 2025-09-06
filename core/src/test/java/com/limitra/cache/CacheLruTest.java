@@ -1,20 +1,21 @@
 package com.limitra.cache;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class CacheLruTest {
 
     @Test
     void constructor_invalidCapacity_throws() {
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new SimpleTTLCache<>(new FakeTimeProvider(), 0);
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new SimpleTTLCache<>(new FakeTimeProvider(), 0);
+                });
     }
 
     @Test
@@ -237,18 +238,20 @@ public class CacheLruTest {
 
         // Given
         int capacity = 64;
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider(), capacity);
+        SimpleTTLCache<String, Integer> cache =
+                new SimpleTTLCache<>(new FakeTimeProvider(), capacity);
 
-        Runnable task = () -> {
-            for (int i = 0; i < 10_000; i++) {
-                String key = "k" + ThreadLocalRandom.current().nextInt(256);
-                if (ThreadLocalRandom.current().nextBoolean()) {
-                    cache.put(key, i);
-                } else {
-                    cache.get(key);
-                }
-            }
-        };
+        Runnable task =
+                () -> {
+                    for (int i = 0; i < 10_000; i++) {
+                        String key = "k" + ThreadLocalRandom.current().nextInt(256);
+                        if (ThreadLocalRandom.current().nextBoolean()) {
+                            cache.put(key, i);
+                        } else {
+                            cache.get(key);
+                        }
+                    }
+                };
 
         Thread thread1 = new Thread(task);
         Thread thread2 = new Thread(task);
@@ -256,8 +259,14 @@ public class CacheLruTest {
         Thread thread4 = new Thread(task);
 
         // When
-        thread1.start(); thread2.start(); thread3.start(); thread4.start();
-        thread1.join();  thread2.join(); thread3.join(); thread4.join();
+        thread1.start();
+        thread2.start();
+        thread3.start();
+        thread4.start();
+        thread1.join();
+        thread2.join();
+        thread3.join();
+        thread4.join();
 
         // Then
         assertTrue(cache.size() <= capacity);

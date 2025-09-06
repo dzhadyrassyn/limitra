@@ -1,10 +1,9 @@
 package com.limitra.cache;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class CacheMetricsTest {
 
@@ -50,7 +49,7 @@ class CacheMetricsTest {
     void metrics_expiredOnSizeCleanup_countsTtlEviction() {
 
         // Given
-        FakeTimeProvider time =new FakeTimeProvider();
+        FakeTimeProvider time = new FakeTimeProvider();
         SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(time);
         cache.put("evictedByTtl", 1, 100);
 
@@ -70,7 +69,7 @@ class CacheMetricsTest {
     void metrics_onRemove_noTtlEviction() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new  FakeTimeProvider());
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider());
         cache.put("eternalKey", 1);
 
         // When
@@ -134,7 +133,7 @@ class CacheMetricsTest {
     void testMetricsImmutability() {
 
         // Given
-        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new  FakeTimeProvider());
+        SimpleTTLCache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider());
         CacheMetrics snapshotBefore = cache.metricsSnapshot();
 
         // When

@@ -1,15 +1,14 @@
 package com.limitra.cache;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class CacheTest {
 
     @Test
-    void putThenGet_returnsValue(){
+    void putThenGet_returnsValue() {
 
         // Given
         Cache<String, Integer> cache = new SimpleTTLCache<>(new FakeTimeProvider());
