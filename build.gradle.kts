@@ -11,4 +11,18 @@ allprojects {
 subprojects {
     apply(plugin = "java")
     apply(plugin = "com.diffplug.spotless")
+    apply(plugin = "jacoco")
+
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        finalizedBy(tasks.named("jacocoTestReport"))
+    }
+
+    tasks.named<JacocoReport>("jacocoTestReport") {
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+            csv.required.set(false)
+        }
+    }
 }

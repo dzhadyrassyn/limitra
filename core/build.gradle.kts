@@ -25,5 +25,3 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
-
-tasks.withType<Test> { useJUnitPlatform() }
