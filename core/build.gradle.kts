@@ -12,9 +12,7 @@ repositories { mavenCentral() }
 
 spotless {
     java {
-        // Use Google Java Format
         googleJavaFormat("1.17.0").aosp()
-        // Which files to check
         target("src/**/*.java")
     }
 }
