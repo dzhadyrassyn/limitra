@@ -14,22 +14,6 @@ package com.limitra.cache;
  *   <li>All methods are safe under concurrent access.
  *   <li>No fairness guarantees are provided: concurrent threads race to acquire tokens.
  * </ul>
- *
- * <h3>Usage</h3>
- *
- * <pre>{@code
- * RateLimiter limiter = new TokenBucketRateLimiter(
- *     new SystemTimeProvider(),
- *     5,    // capacity
- *     2.0   // permits per second
- * );
- *
- * if (limiter.tryAcquire()) {
- *     // allowed
- * } else {
- *     // rejected
- * }
- * }</pre>
  */
 public interface RateLimiter {
 

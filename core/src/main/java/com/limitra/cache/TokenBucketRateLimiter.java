@@ -2,7 +2,15 @@ package com.limitra.cache;
 
 public class TokenBucketRateLimiter implements RateLimiter {
 
-    public TokenBucketRateLimiter(TimeProvider time, long capacity, double permitsPerSecond) {}
+    private final TimeProvider timeProvider;
+    private final long capacity;
+    private final double refillRatePerSecond;
+
+    public TokenBucketRateLimiter(TimeProvider time, long capacity, double permitsPerSecond) {
+        this.timeProvider = time;
+        this.capacity = capacity;
+        this.refillRatePerSecond = permitsPerSecond;
+    }
 
     @Override
     public boolean tryAcquire() {
