@@ -1,13 +1,12 @@
 package com.limitra.cache;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class TokenBucketRateLimiterTest {
 
@@ -15,7 +14,8 @@ class TokenBucketRateLimiterTest {
     void newLimiter_startsFull_allowsBurstUpToCapacity() {
 
         // Given
-        TokenBucketRateLimiter rateLimiter = new TokenBucketRateLimiter(new FakeTimeProvider(), 5L, 2.0);
+        TokenBucketRateLimiter rateLimiter =
+                new TokenBucketRateLimiter(new FakeTimeProvider(), 5L, 2.0);
 
         // When Then
         for (int i = 0; i < 5; i++) {
@@ -85,10 +85,11 @@ class TokenBucketRateLimiterTest {
 
         // Given
         long capacity = 5L;
-        TokenBucketRateLimiter rateLimiter = new TokenBucketRateLimiter(new FakeTimeProvider(), capacity, 10);
+        TokenBucketRateLimiter rateLimiter =
+                new TokenBucketRateLimiter(new FakeTimeProvider(), capacity, 10);
 
         // When Then
-        assertFalse(rateLimiter.tryAcquire((int)capacity + 1));
+        assertFalse(rateLimiter.tryAcquire((int) capacity + 1));
     }
 
     @Test
@@ -142,14 +143,17 @@ class TokenBucketRateLimiterTest {
     @Test
     void constructor_invalidArgs_throw() {
 
-        assertThrows(IllegalArgumentException.class, () -> new TokenBucketRateLimiter(new FakeTimeProvider(), 0, 0));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new TokenBucketRateLimiter(new FakeTimeProvider(), 0, 0));
     }
 
     @Test
     void tryAcquire_invalidPermits_throw() {
 
         // Given
-        TokenBucketRateLimiter rateLimiter = new TokenBucketRateLimiter(new FakeTimeProvider(), 1L, 0.5);
+        TokenBucketRateLimiter rateLimiter =
+                new TokenBucketRateLimiter(new FakeTimeProvider(), 1L, 0.5);
 
         // When, Then
         assertThrows(IllegalArgumentException.class, () -> rateLimiter.tryAcquire(0));
@@ -177,7 +181,8 @@ class TokenBucketRateLimiterTest {
 
         // Given
         long capacity = 2L;
-        TokenBucketRateLimiter rateLimiter = new TokenBucketRateLimiter(new FakeTimeProvider(), capacity, 100);
+        TokenBucketRateLimiter rateLimiter =
+                new TokenBucketRateLimiter(new FakeTimeProvider(), capacity, 100);
 
         // When, Then
         for (int i = 0; i < capacity; i++) {
@@ -191,7 +196,8 @@ class TokenBucketRateLimiterTest {
 
         // Given
         long capacity = 20L;
-        TokenBucketRateLimiter rateLimiter = new TokenBucketRateLimiter(new FakeTimeProvider(), 20L, 0);
+        TokenBucketRateLimiter rateLimiter =
+                new TokenBucketRateLimiter(new FakeTimeProvider(), 20L, 0);
         AtomicInteger count = new AtomicInteger();
 
         Runnable task =
@@ -238,33 +244,37 @@ class TokenBucketRateLimiterTest {
         AtomicReference<Throwable> error = new AtomicReference<>();
         AtomicBoolean running = new AtomicBoolean(true);
 
-        Thread refiller = new Thread(() -> {
-            try {
-                long advanced = 0;
-                while (running.get() && advanced < durationMillis) {
-                    time.advanceMillis(100);
-                    advanced += 100;
-                }
-            } catch (Throwable t) {
-                error.compareAndSet(null, t);
-            } finally {
-                running.set(false);
-            }
-        }, "refiller thread");
+        Thread refiller =
+                new Thread(
+                        () -> {
+                            try {
+                                long advanced = 0;
+                                while (running.get() && advanced < durationMillis) {
+                                    time.advanceMillis(100);
+                                    advanced += 100;
+                                }
+                            } catch (Throwable t) {
+                                error.compareAndSet(null, t);
+                            } finally {
+                                running.set(false);
+                            }
+                        },
+                        "refiller thread");
 
-        Runnable worker = () -> {
-            try {
-                ThreadLocalRandom rnd = ThreadLocalRandom.current();
-                while (running.get()) {
-                    int permits = (rnd.nextInt(100) < 30) ? 2 : 1; // ~30%
-                    if (rateLimiter.tryAcquire(permits)) {
-                        successes.addAndGet(permits);
+        Runnable worker =
+                () -> {
+                    try {
+                        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+                        while (running.get()) {
+                            int permits = (rnd.nextInt(100) < 30) ? 2 : 1; // ~30%
+                            if (rateLimiter.tryAcquire(permits)) {
+                                successes.addAndGet(permits);
+                            }
+                        }
+                    } catch (Throwable t) {
+                        error.compareAndSet(null, t);
                     }
-                }
-            } catch (Throwable t) {
-                error.compareAndSet(null, t);
-            }
-        };
+                };
 
         refiller.start();
         Thread[] workers = new Thread[threads];
@@ -282,7 +292,7 @@ class TokenBucketRateLimiterTest {
         double theoretical = capacity + rate * seconds;
         int observed = successes.get();
 
-        int upperBound = (int)Math.ceil(theoretical * 1.2);
+        int upperBound = (int) Math.ceil(theoretical * 1.2);
         assertTrue(observed <= upperBound, "Observed " + observed + " > loose bound " + upperBound);
     }
 

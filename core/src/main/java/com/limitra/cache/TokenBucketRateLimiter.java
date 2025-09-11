@@ -16,7 +16,7 @@ public class TokenBucketRateLimiter implements RateLimiter {
             throw new IllegalArgumentException("Capacity must be positive");
         }
         if (refillRatePerSecond < 0) {
-            throw  new IllegalArgumentException("RefillRatePerSecond must not be negative");
+            throw new IllegalArgumentException("RefillRatePerSecond must not be negative");
         }
         this.timeProvider = time;
         this.capacity = capacity;
@@ -48,7 +48,8 @@ public class TokenBucketRateLimiter implements RateLimiter {
         long elapsedNanos = now - lastRefillNanos;
         if (elapsedNanos > 0) {
             double elapsedSeconds = (double) elapsedNanos / 1_000_000_000;
-            availableTokens = Math.min(capacity, availableTokens + elapsedSeconds * refillRatePerSecond);
+            availableTokens =
+                    Math.min(capacity, availableTokens + elapsedSeconds * refillRatePerSecond);
         }
         lastRefillNanos = now;
 
