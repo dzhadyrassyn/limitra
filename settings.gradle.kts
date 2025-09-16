@@ -1,2 +1,3 @@
 rootProject.name = "limitra"
-include("core", "api", "benchmark")
+
+include("core", "api", "benchmark", "examples")
