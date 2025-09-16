@@ -2,6 +2,7 @@ package com.limitra.cache;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.limitra.limiter.TokenBucketRateLimiter;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

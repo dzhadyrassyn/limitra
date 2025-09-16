@@ -1,5 +1,8 @@
 package com.limitra.cache;
 
+import com.limitra.metrics.CacheMetrics;
+import com.limitra.metrics.MetricsSnapshot;
+import com.limitra.time.TimeProvider;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

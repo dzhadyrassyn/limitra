@@ -2,6 +2,7 @@ package com.limitra.cache;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.limitra.metrics.CacheMetrics;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package com.limitra.cache;
+package com.limitra.limiter;
 
 /**
  * A thread-safe rate limiter that controls how many permits (tokens) can be acquired over time.

@@ -1,5 +1,6 @@
-package com.limitra.cache;
+package com.limitra.limiter;
 
+import com.limitra.time.TimeProvider;
 import java.util.Objects;
 
 public class TokenBucketRateLimiter implements RateLimiter {

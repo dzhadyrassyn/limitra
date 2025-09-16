@@ -1,4 +1,4 @@
-package com.limitra.cache;
+package com.limitra.time;
 
 public interface TimeProvider {
 
