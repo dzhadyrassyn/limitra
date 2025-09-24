@@ -1,5 +1,9 @@
 # Limitra
 
+[![Build](https://github.com/dzhadyrassyn/limitra/actions/workflows/main.yml/badge.svg)](https://github.com/dzhadyrassyn/limitra/actions/workflows/main.yml)
+[![Coverage](https://img.shields.io/badge/coverage-JaCoCo-green)]()
+[![Code style](https://img.shields.io/badge/code%20style-Google%20Java%20Format-blue)]()
+
 Limitra is a lightweight, high-performance library combining:
 - **In-memory cache** with TTL and LRU eviction.
 - **Token-bucket rate limiter** for controlling request throughput.
