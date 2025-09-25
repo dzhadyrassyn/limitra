@@ -18,6 +18,8 @@ spotless {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

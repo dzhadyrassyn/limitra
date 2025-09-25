@@ -3,6 +3,7 @@ package com.limitra.cache;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.limitra.metrics.CacheMetrics;
+import com.limitra.time.FakeTimeProvider;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Test;
