@@ -1,8 +1,7 @@
-package com.limitra.cache;
+package com.limitra.limiter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.limitra.limiter.TokenBucketRateLimiter;
 import com.limitra.time.FakeTimeProvider;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;

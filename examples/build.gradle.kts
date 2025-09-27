@@ -1,23 +1,7 @@
-plugins {
-
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
-
-repositories { mavenCentral() }
-
-spotless {
-    java {
-        googleJavaFormat("1.17.0").aosp()
-        target("src/**/*.java")
-    }
-}
+plugins { }
 
 dependencies {
-    implementation(project(":core"))
     implementation(project(":common"))
+    implementation(project(":cache"))
+    implementation(project(":limiter"))
 }
